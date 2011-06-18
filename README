@@ -1,5 +1,5 @@
 
-techinterviewprep: A repository of code I did to prepare for a technical interview 
+techinterviewprep: A repository of code I wrote to prepare for a technical interview 
 
 About
 
@@ -8,14 +8,21 @@ About
 Most of the high-tech companies (Google, Amazon, Facebook, Yahoo) today have techinical interviews 
 in their hiring process.
 
-These interviews are used to measure the skills of the applicant. I created this repo to maintain 
-the code I wrote to prepare for a technical interview.
+These interviews are used to measure the skills of the applicant and include real time coding problems.
+Many of these problems include basic Computer Science concepts like data structures and algorithm 
+complexity analysis.
+
+Since I have graduate a few years ago I wrote some code to refresh the concepts. I created this repo 
+to maintain this code I wrote. I focused in remember the concepts I learned at college given the short 
+time I have to prepare for the interview, so the implementations are rough and are not efficient at all. 
+I share the code only because I already wrote it and maybe someone will find it useful.
 
 For every topic I created a subdirectory, this topis are:
 
 1- Sorting algorithms
 2- Data structures
 3- Strings manipulation
-4- Match problems (mostly from eulerproject)
-5- Combinatorial problems
-6- Unix system programming
+4- Math problems (mostly from eulerproject)
+5- Unix system programming
+
+Bugs, comments or patches: martinez.javier@gmail.com
