@@ -7,6 +7,7 @@ int graph[GRAPH_SIZE][GRAPH_SIZE];
 int processed[GRAPH_SIZE];
 int discovered[GRAPH_SIZE];
 int parent[GRAPH_SIZE];
+int distance[GRAPH_SIZE];
 
 #define NONE -1
 #define DISCOVERED 1
@@ -15,7 +16,10 @@ int parent[GRAPH_SIZE];
 #define PROCESSED 1
 #define UNPROCESSED 0
 
+#define INFINITY 1000000
+
 void connect(int, int);
+void connect_weighted(int, int, int);
 void disconnect(int, int);
 int connected(int, int);
 int reachable(int, int);
@@ -30,17 +34,30 @@ void print_adjacency_matrix(void);
 int is_tree(void);
 int vertex_count(void);
 int edge_count(void);
+void dijkstra(int, int);
+void do_dijkstra(int, int);
+void print_short_path(int);
 
 int main(void)
 {
-	connect(1, 2);
-	connect(1, 3);
-	connect(1, 4);
-	connect(2, 5);
-	connect(2, 6);
-	connect(3, 7);
-	connect(4, 8);
-	connect(4, 9);
+
+	connect_weighted(1, 2, 2);
+	connect_weighted(1, 3, 9);
+	connect_weighted(1, 7, 4);
+	connect_weighted(2, 3, 4);
+	connect_weighted(2, 4, 2);
+	connect_weighted(2, 6, 7);
+	connect_weighted(2, 7, 6);
+	connect_weighted(3, 4, 3);
+	connect_weighted(4, 5, 5);
+	connect_weighted(4, 6, 3);
+	connect_weighted(5, 6, 3);
+	connect_weighted(5, 8, 4);
+	connect_weighted(6, 7, 5);
+	connect_weighted(6, 8, 4);
+	connect_weighted(7, 9, 2);
+	connect_weighted(8, 9, 3);
+
 
 	printf("Graph characteristics\n");
 	printf("Adjacency matrix\n");
@@ -56,12 +73,19 @@ int main(void)
 	bfs(1);
 	printf("Deep First Search\n");
 	dfs(1);
+
+	dijkstra(1, 5);
 }
 
 void connect(int i, int j)
 {
-	graph[i][j] = 1;
-	graph[j][i] = 1;
+	connect_weighted(i, j, 1);
+}
+
+void connect_weighted(int i, int j, int w)
+{
+	graph[i][j] = w;
+	graph[j][i] = w;
 }
 
 void disconnect(int i, int j)
@@ -228,4 +252,62 @@ int edge_count(void)
 				edge_count++;
 
 	return edge_count;
+}
+
+void dijkstra(int src, int dest)
+{
+	int i;
+	
+	init_graph();
+	
+	for (i = 0; i < GRAPH_SIZE; i++) {
+		distance[i] = INFINITY;
+		parent[i] = -1;
+	}
+
+	do_dijkstra(src, src);
+
+	for (i = 0; i < GRAPH_SIZE; i++) {
+		printf("node = %d parent = %d distance = %d\n", i, parent[i], distance[i]);
+	}
+
+	print_short_path(dest);
+}
+
+void do_dijkstra(int src, int current)
+{
+	int i;
+
+	if (src == current) {
+		distance[current] = 0;
+	}
+
+	for (i = 0; i < GRAPH_SIZE; i++) {
+		if (graph[current][i] && !processed[i]) {
+			if (distance[i] > distance[current] + graph[current][i]) {
+				distance[i] = distance[current] + graph[current][i];
+				parent[i] = current;
+			}
+		}
+	}
+
+	processed[current] = PROCESSED;
+
+	for (i = 0; i < GRAPH_SIZE; i++) {
+		if (graph[current][i] && !processed[i]) {
+			do_dijkstra(src, i);
+		}
+	}
+}
+
+void print_short_path(int dest)
+{
+	if (parent[dest] == -1) {
+		printf("%d\n", dest);
+		return;
+	}
+
+	print_short_path(parent[dest]);
+
+	printf("%d\n", dest);
 }
